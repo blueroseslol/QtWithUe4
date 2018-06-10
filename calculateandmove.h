@@ -33,9 +33,9 @@ private:
 
     void startUe4();
 
-    void resizeEvent(QResizeEvent *event);
+//    void resizeEvent(QResizeEvent *event);
 
-    void moveEvent(QMoveEvent *event);
+//    void moveEvent(QMoveEvent *event);
 };
 
 #endif // CALCULATEANDMOVE_H
