@@ -7,10 +7,10 @@
 #define mothodB 0
 
 #if mothodA
-//#include "calculateandmove.h"
+#include "calculateandmove.h"
 //#include "mainwindow.h"
 //#include "widget.h"
-#include "mywindow.h"
+//#include "mywindow.h"
 #endif
 
 #if mothodB
@@ -20,10 +20,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    Widget w;
-//    w.show();
+
+//    a.setAttribute(Qt::AA_NativeWindows);
+
 #if mothodA
-    MyWindow w;
+    CalculateAndMove w;
     w.show();
 #endif
 

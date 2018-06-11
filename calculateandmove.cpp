@@ -3,12 +3,13 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QThread>
+#include <QWindow>
 CalculateAndMove::CalculateAndMove(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CalculateAndMove),process(nullptr)
 {
     ui->setupUi(this);
-    setWindowState(Qt::WindowMaximized);
+    setAttribute(Qt::WA_NativeWindow, true);
 }
 
 CalculateAndMove::~CalculateAndMove()
@@ -53,11 +54,7 @@ void CalculateAndMove::startUe4(){
             qDebug()<<hwnWindow;
             if(hwnWindow!=0)
             {
-                SetParent(hwnWindow,(HWND)QWidget::winId());
-                QRect rect=ui->label->geometry();
-                MoveWindow(hwnWindow,0,0, rect.width(), rect.height(), true);
-
-                connect(this,SIGNAL(insetUe4Complete()),this,SLOT(repaint()));
+                connect(this,SIGNAL(insetUe4Complete()),this,SLOT(insetUe4()));
                 emit insetUe4Complete();
 
                 break;
@@ -66,35 +63,27 @@ void CalculateAndMove::startUe4(){
     });
 }
 
+void CalculateAndMove::insetUe4(){
+
+////----------------------------------------------
+////方法一，进qt后需要调用解除客户区锁定函数（Ue4
+//    ue4Window=QWindow::fromWinId(WId(hwnWindow));
+//    ue4Window->setParent( this->windowHandle());
+//    ue4Window->setGeometry(0,0,ui->label->width(),ui->label->height());
+//    ue4Window->show();
+
+ //----------------------------------------------
+ //方法二，进qt后需要调用解除客户区锁定函数（Ue4
+    SetParent(hwnWindow,(HWND)QWidget::winId());
+    QRect rect=ui->label->geometry();
+    MoveWindow(hwnWindow,0,0, rect.width(), rect.height(), true);
+
+
+    this->repaint();
+}
+
 void CalculateAndMove::on_pushButton_clicked()
 {
         BringWindowToTop (hwnWindow);
         SetForegroundWindow(hwnWindow);
 }
-
-//void CalculateAndMove::resizeEvent(QResizeEvent *event){
-
-//    QPoint pos=ui->label->mapToGlobal(ui->label->pos());
-//    SetParent(hwnWindow,(HWND)QWidget::winId());
-//    QRect rect=ui->label->geometry();
-////    MoveWindow(hwnWindow,pos.x(), pos.y(), rect.width()-ui->label->pos().x(), rect.height()-ui->label->pos().y(), false);
-
-//    SetWindowPos(hwnWindow,       // handle to window
-//                                                                                   HWND_TOPMOST,  // placement-order handle
-//                                                                                   pos.x(), pos.y(), rect.width()-ui->label->pos().x(), rect.height()-ui->label->pos().y(),
-//                                                                                   SWP_SHOWWINDOW);
-//    event->accept();
-//}
-
-//void CalculateAndMove::moveEvent(QMoveEvent *event){
-//    QPoint pos=ui->label->mapToGlobal(ui->label->pos());
-//    //SetParent(hwnWindow,(HWND)QWidget::winId());
-//    QRect rect=ui->label->geometry();
-////    MoveWindow(hwnWindow,pos.x(), pos.y(), rect.width()-ui->label->pos().x(), rect.height()-ui->label->pos().y(), false);
-
-//    SetWindowPos(hwnWindow,       // handle to window
-//                                                                                   HWND_TOPMOST,  // placement-order handle
-//                                                                                   pos.x(), pos.y(), rect.width()-ui->label->pos().x(), rect.height()-ui->label->pos().y(),
-//                                                                                   SWP_SHOWWINDOW);
-//    event->accept();
-//}

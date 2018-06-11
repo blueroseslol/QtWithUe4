@@ -26,6 +26,7 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void insetUe4();
 private:
     Ui::CalculateAndMove *ui;
     QProcess *process;
@@ -33,9 +34,7 @@ private:
 
     void startUe4();
 
-//    void resizeEvent(QResizeEvent *event);
-
-//    void moveEvent(QMoveEvent *event);
+    QWindow *ue4Window;
 };
 
 #endif // CALCULATEANDMOVE_H
