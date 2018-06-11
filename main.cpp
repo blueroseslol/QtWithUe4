@@ -7,7 +7,10 @@
 #define mothodB 0
 
 #if mothodA
-#include "calculateandmove.h"
+//#include "calculateandmove.h"
+//#include "mainwindow.h"
+//#include "widget.h"
+#include "mywindow.h"
 #endif
 
 #if mothodB
@@ -20,7 +23,7 @@ int main(int argc, char *argv[])
 //    Widget w;
 //    w.show();
 #if mothodA
-    CalculateAndMove w;
+    MyWindow w;
     w.show();
 #endif
 

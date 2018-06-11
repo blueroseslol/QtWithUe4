@@ -26,12 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         widget.cpp \
-    calculateandmove.cpp
+    calculateandmove.cpp \
+    mainwindow.cpp \
+    mywindow.cpp
 
 HEADERS += \
         widget.h \
-    calculateandmove.h
+    calculateandmove.h \
+    mainwindow.h \
+    mywindow.h
 
 FORMS += \
         widget.ui \
-    calculateandmove.ui
+    calculateandmove.ui \
+    mainwindow.ui

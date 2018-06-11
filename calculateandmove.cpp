@@ -53,19 +53,9 @@ void CalculateAndMove::startUe4(){
             qDebug()<<hwnWindow;
             if(hwnWindow!=0)
             {
-//                QPoint pos=ui->label->mapToGlobal(ui->label->pos());
-//                SetParent(hwnWindow,(HWND)QWidget::winId());
-//                QRect rect=ui->label->geometry();
-//                MoveWindow(hwnWindow,pos.x(), pos.y(), rect.width()-ui->label->pos().x(), rect.height()-ui->label->pos().y(), false);
                 SetParent(hwnWindow,(HWND)QWidget::winId());
                 QRect rect=ui->label->geometry();
                 MoveWindow(hwnWindow,0,0, rect.width(), rect.height(), true);
-
-
-
-
-//                ::SetWindowLong(hwnWindow, GWL_STYLE, ::GetWindowLong(hwnWindow, GWL_STYLE) & ~(WS_BORDER | WS_DLGFRAME | WS_THICKFRAME));
-//                ::SetWindowLong(hwnWindow, GWL_EXSTYLE, ::GetWindowLong(hwnWindow, GWL_EXSTYLE) & ~WS_EX_DLGMODALFRAME);
 
                 connect(this,SIGNAL(insetUe4Complete()),this,SLOT(repaint()));
                 emit insetUe4Complete();
@@ -79,7 +69,7 @@ void CalculateAndMove::startUe4(){
 void CalculateAndMove::on_pushButton_clicked()
 {
         BringWindowToTop (hwnWindow);
-                        SetForegroundWindow(hwnWindow);
+        SetForegroundWindow(hwnWindow);
 }
 
 //void CalculateAndMove::resizeEvent(QResizeEvent *event){
