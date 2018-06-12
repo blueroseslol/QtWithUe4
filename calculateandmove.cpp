@@ -4,6 +4,7 @@
 #include <QtConcurrent>
 #include <QThread>
 #include <QWindow>
+#include <QTimer>
 CalculateAndMove::CalculateAndMove(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CalculateAndMove),process(nullptr)
@@ -56,15 +57,13 @@ void CalculateAndMove::startUe4(){
             {
                 connect(this,SIGNAL(insetUe4Complete()),this,SLOT(insetUe4()));
                 emit insetUe4Complete();
-
                 break;
             }
         }
     });
 }
 
-void CalculateAndMove::insetUe4(){
-
+void CalculateAndMove::insetUe4(){  
 ////----------------------------------------------
 ////方法一，进qt后需要调用解除客户区锁定函数（Ue4
 //    ue4Window=QWindow::fromWinId(WId(hwnWindow));
@@ -74,16 +73,53 @@ void CalculateAndMove::insetUe4(){
 
  //----------------------------------------------
  //方法二，进qt后需要调用解除客户区锁定函数（Ue4
-    SetParent(hwnWindow,(HWND)QWidget::winId());
     QRect rect=ui->label->geometry();
-    MoveWindow(hwnWindow,0,0, rect.width(), rect.height(), true);
+    QPoint pos=ui->label->mapToGlobal(ui->label->pos());
+    qDebug()<<"rect:"<<rect;
+    qDebug()<<"worldPos:"<<pos;
+    QRect worldRect={rect.x()+pos.x(),rect.y()+pos.y(),rect.width()+pos.x(),rect.height()+pos.y()};
+
+    SetParent(hwnWindow,(HWND)QWidget::winId());
+
+    //MoveWindow(hwnWindow,rect.x(),rect.y(), rect.width(), rect.height(), true);
+    ::SetWindowPos( hwnWindow, nullptr,rect.x(), rect.y(), rect.width(), rect.height(), SWP_NOZORDER | SWP_FRAMECHANGED| SWP_NOCOPYBITS );
 
 
+    qDebug()<<"worldRect:"<<worldRect;
+////调整客户区大小
+//    WINDOWINFO WindowInfo;
+//    ZeroMemory(&WindowInfo,sizeof(WindowInfo));
+//    WindowInfo.cbSize = sizeof(WindowInfo);
+//    ::GetWindowInfo(hwnWindow, &WindowInfo);
+
+//    QPoint pos=ui->label->mapToGlobal(ui->label->pos());
+
+//    RECT TestRect;
+//    TestRect.left =pos.x();
+//    TestRect.right =pos.x()+rect.width();
+//    TestRect.top =pos.y();
+//    TestRect.bottom = pos.y()+rect.height();
+//    AdjustWindowRectEx(&TestRect, WindowInfo.dwStyle, false, WindowInfo.dwExStyle);
+
+//----------------------------------------------
+
+
+    LPRECT lprect;
+    GetClientRect(hwnWindow,lprect);
+    qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
     this->repaint();
 }
 
 void CalculateAndMove::on_pushButton_clicked()
 {
+    LPRECT lprect;
+    GetClientRect(hwnWindow,lprect);
+    qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
         BringWindowToTop (hwnWindow);
         SetForegroundWindow(hwnWindow);
+}
+
+void CalculateAndMove::moveEvent(QMoveEvent *event){
+
+    event->accept();
 }

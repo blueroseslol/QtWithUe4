@@ -43,16 +43,19 @@ void MyWindow::startUe4(){
 }
 
 void MyWindow::insetUe4(){
-        //隐藏窗口
-        ShowWindow(hwnWindow,SW_HIDE);
+//        //隐藏窗口
+//        ShowWindow(hwnWindow,SW_HIDE);
 
        QWindow *win=QWindow::fromWinId(WId(hwnWindow));
        win->setParent(this);
-
+        win->show();
        win->setPosition(0,0);
 //    SetParent(hwnWindow,(HWND)QWidget::winId());
 //    QRect rect=ui->label->geometry();
 //    MoveWindow(hwnWindow,0,0, rect.width(), rect.height(), true);
+       LPRECT lprect;
+       GetClientRect(hwnWindow,lprect);
+       qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
 }
 
 void MyWindow::resizeEvent(QResizeEvent *event){
