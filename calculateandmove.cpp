@@ -81,7 +81,7 @@ void CalculateAndMove::insetUe4(){
 
     SetParent(hwnWindow,(HWND)QWidget::winId());
 
-    //MoveWindow(hwnWindow,rect.x(),rect.y(), rect.width(), rect.height(), true);
+    MoveWindow(hwnWindow,rect.x(),rect.y(), rect.width(), rect.height(), true);
     ::SetWindowPos( hwnWindow, nullptr,rect.x(), rect.y(), rect.width(), rect.height(), SWP_NOZORDER | SWP_FRAMECHANGED| SWP_NOCOPYBITS );
 
 
@@ -107,16 +107,25 @@ void CalculateAndMove::insetUe4(){
     LPRECT lprect;
     GetClientRect(hwnWindow,lprect);
     qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
+
+    InvalidateRect(hwnWindow,0,true) ;
+    UpdateWindow(hwnWindow);
+
     this->repaint();
 }
 
 void CalculateAndMove::on_pushButton_clicked()
 {
     LPRECT lprect;
-    GetClientRect(hwnWindow,lprect);
-    qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
-        BringWindowToTop (hwnWindow);
-        SetForegroundWindow(hwnWindow);
+//    GetClientRect(hwnWindow,lprect);
+//    qDebug()<<(int)lprect->left<<(int)lprect->top<<(int)lprect->right<<(int)lprect->bottom;
+    InvalidateRect(hwnWindow,0,true) ;
+    UpdateWindow(hwnWindow);
+
+//    RedrawWindow(hwndWindow,);
+
+//    BringWindowToTop (hwnWindow);
+//    SetForegroundWindow(hwnWindow);
 }
 
 void CalculateAndMove::moveEvent(QMoveEvent *event){
